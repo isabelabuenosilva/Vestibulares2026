@@ -6,6 +6,9 @@ st.set_page_config(
     layout="wide"
 )
 
+if "pagina" not in st.session_state:
+    st.session_state.pagina = "home"
+
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@400;700&display=swap');
@@ -79,7 +82,27 @@ st.markdown("""
     .stTabs [data-baseweb="tab"] { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #008ED4; }
     .stTabs [aria-selected="true"] { color: #002561 !important; border-bottom: 3px solid #00BDF2 !important; }
 
-    div[data-testid="stInfo"] {
+    .nav-btn button {
+        background-color: #00BDF2 !important;
+        color: white !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 1rem !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 0.8rem 1.5rem !important;
+        width: 100% !important;
+        transition: background 0.2s;
+    }
+    .nav-btn button:hover { background-color: #008ED4 !important; }
+    .back-btn button {
+        background-color: transparent !important;
+        color: #008ED4 !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 600 !important;
+        border: 2px solid #00BDF2 !important;
+        border-radius: 8px !important;
+    }
         background-color: #D4EFFC;
         color: #002561;
         border-left-color: #00BDF2;
@@ -94,26 +117,54 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ── Sidebar ──────────────────────────────────────────────────────────────────
-with st.sidebar:
+# ── Página inicial ───────────────────────────────────────────────────────────
+if st.session_state.pagina == "home":
+    st.markdown("<br>", unsafe_allow_html=True)
     try:
-        st.image("logo_ismart.png", width=130)
+        c1, c2, c3 = st.columns([2, 1, 2])
+        with c2:
+            st.image("logo_ismart.png", use_container_width=True)
     except Exception:
         pass
-    st.markdown("<h2 style='font-family:Montserrat,sans-serif;color:#00BDF2;font-size:1.1rem;'>📚 Vestibulares 2026</h2>", unsafe_allow_html=True)
-    st.markdown("---")
-    pagina = st.radio(
-        "Navegue pelas seções:",
-        ["🎓 Vestibulares 2026", "📅 Vestibulares Meio de Ano 2026", "💡 Você sabia?"],
-        label_visibility="collapsed"
-    )
-    st.markdown("---")
-    st.caption("Dashboard com informações e dicas para os vestibulares de 2026.")
+    st.markdown('<div class="main-title">Vestibulares 2026 | Informações e Dicas</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-subtitle">Selecione uma seção para começar</div>', unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    col1, col2, col3, col4, col5 = st.columns([1, 2, 2, 2, 1])
+    with col2:
+        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
+        if st.button("🎓 Vestibulares 2026", use_container_width=True):
+            st.session_state.pagina = "vest2026"
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    with col3:
+        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
+        if st.button("📅 Vestibulares Meio de Ano", use_container_width=True):
+            st.session_state.pagina = "meioano"
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    with col4:
+        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
+        if st.button("💡 Você sabia?", use_container_width=True):
+            st.session_state.pagina = "sabia"
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    st.stop()
+
+# ── Botão voltar (páginas internas) ─────────────────────────────────────────
+st.markdown('<div class="back-btn">', unsafe_allow_html=True)
+if st.button("← Voltar ao início"):
+    st.session_state.pagina = "home"
+    st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
+st.markdown("---")
+
+pagina = st.session_state.pagina
 
 # ════════════════════════════════════════════════════════════════════════════
 # PÁGINA 1 — VESTIBULARES 2026
 # ════════════════════════════════════════════════════════════════════════════
-if pagina == "🎓 Vestibulares 2026":
+if pagina == "vest2026":
 
     st.markdown('<div class="main-title">🎓 Vestibulares 2026</div>', unsafe_allow_html=True)
     st.markdown('<div class="main-subtitle">Selecione um vestibular para ver as informações completas</div>', unsafe_allow_html=True)
@@ -279,7 +330,7 @@ Na redação, os corretores esperam **menos redações prontas**, que seguem a "
 # ════════════════════════════════════════════════════════════════════════════
 # PÁGINA 2 — VESTIBULARES MEIO DE ANO 2026
 # ════════════════════════════════════════════════════════════════════════════
-elif pagina == "📅 Vestibulares Meio de Ano 2026":
+elif pagina == "meioano":
 
     st.markdown('<div class="main-title">📅 Vestibulares Meio de Ano 2026</div>', unsafe_allow_html=True)
     st.markdown('<div class="main-subtitle">Selecione um vestibular para ver as informações completas</div>', unsafe_allow_html=True)
@@ -355,7 +406,7 @@ elif pagina == "📅 Vestibulares Meio de Ano 2026":
 # ════════════════════════════════════════════════════════════════════════════
 # PÁGINA 3 — VOCÊ SABIA?
 # ════════════════════════════════════════════════════════════════════════════
-elif pagina == "💡 Você sabia?":
+elif pagina == "sabia":
 
     st.markdown('<div class="main-title">💡 Você sabia?</div>', unsafe_allow_html=True)
     st.markdown('<div class="main-subtitle">Dicas e recursos gratuitos para turbinar seus estudos</div>', unsafe_allow_html=True)
