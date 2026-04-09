@@ -666,7 +666,7 @@ Outros cursinhos que oferecem simulados abertos presenciais/online:
 """)
 
     st.markdown("---")
-    with st.expander("📱 O que seguir para me atualizar?"):
+    with st.expander("### 📱 O que seguir para me atualizar?"):
         st.markdown("")
         _, b1, b2, b3, _ = st.columns([0.2, 2, 2, 2, 0.2])
         with b1:
