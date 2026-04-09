@@ -30,10 +30,8 @@ st.markdown("""
         font-size: 1rem;
         margin-bottom: 1.2rem;
     }
-
     h2, h3 { font-family: 'Montserrat', sans-serif !important; color: #002561 !important; }
     h4 { font-family: 'Montserrat', sans-serif !important; color: #008ED4 !important; }
-
     hr { border: 1.5px solid #9DDCF9; margin: 1rem 0; }
 
     .badge {
@@ -58,7 +56,6 @@ st.markdown("""
         font-family: 'Lato', sans-serif;
         color: #002561;
     }
-
     .alert-box {
         background: #fff0f3;
         border-left: 4px solid #EE2D67;
@@ -70,18 +67,6 @@ st.markdown("""
         color: #002561;
     }
 
-    [data-testid="stSidebar"] { background: #002561 !important; }
-    [data-testid="stSidebar"] * { color: #D4EFFC !important; font-family: 'Lato', sans-serif !important; }
-    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2 {
-        color: #00BDF2 !important;
-        font-family: 'Montserrat', sans-serif !important;
-    }
-
-    .stSelectbox label { font-family: 'Montserrat', sans-serif; color: #002561 !important; font-weight: 600; }
-
-    .stTabs [data-baseweb="tab"] { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #008ED4; }
-    .stTabs [aria-selected="true"] { color: #002561 !important; border-bottom: 3px solid #00BDF2 !important; }
-
     .nav-btn button {
         background-color: #00BDF2 !important;
         color: white !important;
@@ -92,7 +77,6 @@ st.markdown("""
         border-radius: 10px !important;
         padding: 0.8rem 1.5rem !important;
         width: 100% !important;
-        transition: background 0.2s;
     }
     .nav-btn button:hover { background-color: #008ED4 !important; }
     .back-btn button {
@@ -103,6 +87,8 @@ st.markdown("""
         border: 2px solid #00BDF2 !important;
         border-radius: 8px !important;
     }
+
+    div[data-testid="stInfo"] {
         background-color: #D4EFFC;
         color: #002561;
         border-left-color: #00BDF2;
@@ -114,10 +100,46 @@ st.markdown("""
         border-left-color: #002561;
         font-family: 'Lato', sans-serif;
     }
+    [data-testid="stSidebar"] { display: none; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Página inicial ───────────────────────────────────────────────────────────
+# ── Helpers ──────────────────────────────────────────────────────────────────
+def render_datas(dados):
+    for item, data, gray in dados:
+        c1, c2 = st.columns([3, 1])
+        with c1:
+            st.markdown(f"**{item}**")
+        with c2:
+            cls = "badge badge-gray" if gray else "badge"
+            st.markdown(f'<span class="{cls}">{data}</span>', unsafe_allow_html=True)
+        st.markdown("")
+
+def render_cronograma(dados, site=None):
+    if site:
+        st.markdown(f"🔗 **Site:** [{site}](https://{site})")
+        st.markdown("")
+    render_datas(dados)
+
+def btn_voltar(destino="home"):
+    st.markdown('<div class="back-btn">', unsafe_allow_html=True)
+    if st.button("← Voltar"):
+        st.session_state.pagina = destino
+        st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown("---")
+
+def nav_btn(label, destino, col):
+    with col:
+        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
+        if st.button(label, use_container_width=True):
+            st.session_state.pagina = destino
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# ════════════════════════════════════════════════════════════════════════════
+# HOME
+# ════════════════════════════════════════════════════════════════════════════
 if st.session_state.pagina == "home":
     st.markdown("<br>", unsafe_allow_html=True)
     try:
@@ -130,57 +152,256 @@ if st.session_state.pagina == "home":
     st.markdown('<div class="main-subtitle">Selecione uma seção para começar</div>', unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
 
-    col1, col2, col3, col4, col5 = st.columns([1, 2, 2, 2, 1])
-    with col2:
-        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
-        if st.button("🎓 Vestibulares 2026", use_container_width=True):
-            st.session_state.pagina = "vest2026"
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-    with col3:
-        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
-        if st.button("📅 Vestibulares Meio de Ano", use_container_width=True):
-            st.session_state.pagina = "meioano"
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-    with col4:
-        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
-        if st.button("💡 Você sabia?", use_container_width=True):
-            st.session_state.pagina = "sabia"
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
+    _, c1, c2, c3, c4, _ = st.columns([0.5, 2, 2, 2, 2, 0.5])
+    nav_btn("🎓 Vestibulares 2026", "vest2026", c1)
+    nav_btn("📅 Vestibulares Meio de Ano", "meioano", c2)
+    nav_btn("💡 Você sabia?", "sabia", c3)
+    nav_btn("🏛️ Políticas de Permanência e Auxílios", "permanencia", c4)
     st.stop()
 
-# ── Botão voltar (páginas internas) ─────────────────────────────────────────
-st.markdown('<div class="back-btn">', unsafe_allow_html=True)
-if st.button("← Voltar ao início"):
-    st.session_state.pagina = "home"
-    st.rerun()
-st.markdown('</div>', unsafe_allow_html=True)
-st.markdown("---")
+# ════════════════════════════════════════════════════════════════════════════
+# POLÍTICAS DE PERMANÊNCIA
+# ════════════════════════════════════════════════════════════════════════════
+elif st.session_state.pagina == "permanencia":
+    btn_voltar("home")
+    st.markdown('<div class="main-title">🏛️ Políticas de Permanência e Auxílios</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-subtitle">Selecione o tipo de instituição</div>', unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
 
-pagina = st.session_state.pagina
+    _, c1, c2, _ = st.columns([1, 2, 2, 1])
+    nav_btn("🎓 Universidades Públicas", "publicas", c1)
+    nav_btn("🏫 Universidades Privadas", "privadas", c2)
+    st.stop()
 
 # ════════════════════════════════════════════════════════════════════════════
-# PÁGINA 1 — VESTIBULARES 2026
+# UNIVERSIDADES PÚBLICAS
 # ════════════════════════════════════════════════════════════════════════════
-if pagina == "vest2026":
+elif st.session_state.pagina == "publicas":
+    btn_voltar("permanencia")
+    st.markdown('<div class="main-title">🎓 Universidades Públicas</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-subtitle">Clique em uma universidade para ver os detalhes</div>', unsafe_allow_html=True)
+    st.markdown("")
 
+    universidades_publicas = [
+        {
+            "nome": "USP - Universidade de São Paulo",
+            "programa": "PAPFE",
+            "beneficios": ["💰 Bolsa mensal: valor mensal para manutenção", "🏠 Moradia estudantil (CRUSP): residência gratuita para alunos de outras cidades", "🍽️ Alimentação: isenção total ou parcial no restaurante", "💻 Inclusão digital (equipamentos/internet)", "🧠 Apoio psicológico e social"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade", "Prioridade para estudantes de escola pública"],
+            "site": "https://www.usp.br"
+        },
+        {
+            "nome": "UNICAMP - Universidade Estadual de Campinas",
+            "programa": "SAE / DEAPE",
+            "beneficios": ["💰 Bolsa Auxílio Social: valor mensal para manutenção", "🏠 Moradia (Moradia Estudantil): vaga ou auxílio aluguel", "🍽️ Alimentação: isenção total ou parcial no restaurante", "🚌 Transporte: auxílio financeiro", "🧠 Apoio psicológico e pedagógico"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade e de permanência na cidade", "Prioridade para ingressantes por cotas"],
+            "site": "https://www.unicamp.br"
+        },
+        {
+            "nome": "UNESP - Universidade Estadual Paulista",
+            "programa": "PAE",
+            "beneficios": ["💰 Auxílio permanência", "🏠 Moradia (Moradia Estudantil): vaga ou auxílio aluguel", "🍽️ Alimentação: isenção total ou parcial no restaurante", "🚌 Transporte: auxílio financeiro", "📚 Apoio pedagógico"],
+            "criterios": ["Análise socioeconômica", "Renda familiar", "Distância da cidade de origem", "Situação de vulnerabilidade social"],
+            "site": "https://www.unesp.br"
+        },
+        {
+            "nome": "UNIFESP - Universidade Federal de São Paulo",
+            "programa": "Assistência Estudantil",
+            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🚌 Transporte", "💻 Inclusão digital (equipamentos/internet)"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
+            "site": "https://www.unifesp.br"
+        },
+        {
+            "nome": "UFABC - Universidade Federal do ABC",
+            "programa": "PAE",
+            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "💻 Inclusão digital (equipamentos/internet)"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade e de permanência na cidade"],
+            "site": "https://www.ufabc.edu.br"
+        },
+        {
+            "nome": "UFSCAR - Universidade Federal de São Carlos",
+            "programa": "Assistência Estudantil",
+            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "💻 Inclusão digital (equipamentos/internet)"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
+            "site": "https://www.ufscar.br"
+        },
+        {
+            "nome": "UFLA - Universidade Federal de Lavras",
+            "programa": "PRAEC",
+            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🧠 Apoio psicológico"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade e de permanência na cidade"],
+            "site": "https://ufla.br"
+        },
+        {
+            "nome": "UFU - Universidade Federal de Uberlândia",
+            "programa": "PROAE",
+            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🚌 Transporte", "🧠 Saúde e apoio acadêmico"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
+            "site": "https://www.ufu.br"
+        },
+        {
+            "nome": "UNIFEI - Universidade Federal de Itajubá",
+            "programa": "",
+            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "💻 Inclusão digital (equipamentos/internet)"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade e de permanência na cidade"],
+            "site": "https://www.unifei.edu.br"
+        },
+        {
+            "nome": "UFF - Universidade Federal Fluminense",
+            "programa": "PROAES",
+            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🧠 Apoio psicológico"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
+            "site": "https://www.uff.br"
+        },
+        {
+            "nome": "UFSC - Universidade Federal de Santa Catarina",
+            "programa": "PRAE",
+            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🧠 Apoio psicológico"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade e de permanência na cidade"],
+            "site": "https://ufsc.br"
+        },
+        {
+            "nome": "UFPR - Universidade Federal do Paraná",
+            "programa": "PRAE",
+            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🚌 Transporte", "🧠 Saúde"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
+            "site": "https://www.ufpr.br"
+        },
+        {
+            "nome": "UFV - Universidade Federal de Viçosa",
+            "programa": "",
+            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação", "🧠 Saúde"],
+            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
+            "site": "https://www.ufv.br"
+        },
+    ]
+
+    for u in universidades_publicas:
+        with st.expander(f"🏛️ {u['nome']}"):
+            if u["programa"]:
+                st.markdown(f"**Programa:** {u['programa']}")
+            st.markdown("**Benefícios:**")
+            for b in u["beneficios"]:
+                st.markdown(f"- {b}")
+            st.markdown("**Critérios:**")
+            for c in u["criterios"]:
+                st.markdown(f"- {c}")
+            st.markdown(f"🔗 [Site oficial]({u['site']})")
+    st.stop()
+
+# ════════════════════════════════════════════════════════════════════════════
+# UNIVERSIDADES PRIVADAS
+# ════════════════════════════════════════════════════════════════════════════
+elif st.session_state.pagina == "privadas":
+    btn_voltar("permanencia")
+    st.markdown('<div class="main-title">🏫 Universidades Privadas</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-subtitle">Clique em uma universidade para ver os detalhes</div>', unsafe_allow_html=True)
+    st.markdown("")
+
+    universidades_privadas = [
+        {
+            "nome": "Insper",
+            "beneficios": ["💰 Bolsa integral cobre 100% da mensalidade", "💵 Ajuda de custo mensal", "🏠 Moradia", "💻 Notebook", "🌍 Inglês"],
+            "criterios": ["Processo seletivo acadêmico (prova + desempenho)", "Avaliação socioeconômica e de Renda familiar", "Entrevistas + análise de perfil"],
+            "site": "https://www.insper.edu.br",
+            "obs": []
+        },
+        {
+            "nome": "FGV - Fundação Getulio Vargas",
+            "beneficios": ["💰 Bolsas integrais ou parciais", "🏠 Alguns auxílios adicionais (limitados)", "💳 Bolsas reembolsáveis (tipo financiamento)"],
+            "criterios": ["Mérito (desempenho no vestibular)", "Avaliação socioeconômica e de Renda familiar", "Em alguns casos, compromisso de devolução futura"],
+            "site": "https://www.fgv.br",
+            "obs": []
+        },
+        {
+            "nome": "INTELI - Instituto de Tecnologia e Liderança",
+            "beneficios": ["💰 Bolsa integral cobre 100% da mensalidade", "💵 Ajuda de custo mensal", "🏠 Moradia", "🍽️ Alimentação", "🚌 Transporte", "💻 Notebook", "🌍 Inglês"],
+            "criterios": ["Processo seletivo próprio (prova + desempenho + perfil)", "Avaliação socioeconômica e de Renda familiar", "Entrevistas + análise de perfil"],
+            "site": "https://www.inteli.edu.br",
+            "obs": []
+        },
+        {
+            "nome": "Instituto Mauá de Tecnologia",
+            "beneficios": ["💰 Bolsas integrais/parciais até 100%"],
+            "criterios": ["Desempenho no vestibular", "Avaliação socioeconômica e de Renda familiar", "Desempenho acadêmico", "Análise de perfil"],
+            "site": "https://maua.br",
+            "obs": []
+        },
+        {
+            "nome": "PUC SP - Pontifícia Universidade Católica de São Paulo",
+            "beneficios": ["💰 Bolsas integrais/parciais até 100%"],
+            "criterios": ["Desempenho no vestibular", "Desempenho acadêmico", "Entrevista", "Avaliação socioeconômica e de Renda familiar"],
+            "site": "https://www.pucsp.br",
+            "obs": [
+                "**Bolsa SER PUC:** Edital específico para alunos que não se enquadram totalmente no perfil filantrópico, mas precisam de auxílio, mantido por doações.",
+                "**Pod PuG:** Programa de parcelamento da própria PUC, sem juros, onde se paga metade durante o curso e o restante após a formatura."
+            ]
+        },
+        {
+            "nome": "Universidade Presbiteriana Mackenzie",
+            "beneficios": ["💰 Bolsas integrais/parciais até 100%"],
+            "criterios": [
+                "**Bolsa Filantrópica Mackenzie:** Avaliação socioeconômica e de Renda familiar.",
+                "**Programa Mackenzie Pra Você:** Destinado a alunos que cursaram o ensino médio em escola pública. A seleção é a partir do desempenho no vestibular."
+            ],
+            "site": "https://www.mackenzie.br",
+            "obs": []
+        },
+        {
+            "nome": "Centro Universitário FEI",
+            "beneficios": ["💰 Bolsas integrais/parciais até 100%", "A bolsa é reavaliada semestralmente a partir de uma análise de critérios socioeconômicos e do desempenho acadêmico"],
+            "criterios": ["Desempenho no vestibular", "Avaliação socioeconômica e de Renda familiar"],
+            "site": "https://www.fei.edu.br",
+            "obs": []
+        },
+        {
+            "nome": "Faculdade Israelita de Ciências da Saúde Albert Einstein",
+            "beneficios": ["💰 Bolsas integrais/parciais até 100%", "A bolsa é reavaliada anualmente a partir de uma análise de critérios socioeconômicos e do desempenho acadêmico"],
+            "criterios": ["Alto desempenho acadêmico", "Avaliação socioeconômica e de Renda familiar", "Entrevistas + análise de perfil"],
+            "site": "https://www.einstein.br",
+            "obs": []
+        },
+        {
+            "nome": "Faculdade de Ciências Médicas da Santa Casa de São Paulo",
+            "beneficios": ["💰 Bolsas integrais (100%) e parciais (50%)", "A bolsa é reavaliada anualmente a partir de uma análise de critérios socioeconômicos"],
+            "criterios": ["Desempenho no vestibular", "Avaliação socioeconômica e de Renda familiar"],
+            "site": "https://fcmsantacasasp.edu.br",
+            "obs": []
+        },
+        {
+            "nome": "Hospital Sírio-Libanês Ensino e Pesquisa",
+            "beneficios": ["💰 Bolsas integrais que cobrem matrícula e mensalidades do curso", "A bolsa é reavaliada semestralmente a partir de uma análise de critérios socioeconômicos e do desempenho acadêmico"],
+            "criterios": ["Entrevistas + análise de perfil", "Desempenho no vestibular", "Avaliação socioeconômica e de Renda familiar"],
+            "site": "https://www.hospitalsiriolibanes.org.br",
+            "obs": []
+        },
+    ]
+
+    for u in universidades_privadas:
+        with st.expander(f"🏫 {u['nome']}"):
+            st.markdown("**Benefícios:**")
+            for b in u["beneficios"]:
+                st.markdown(f"- {b}")
+            st.markdown("**Critérios:**")
+            for c in u["criterios"]:
+                st.markdown(f"- {c}")
+            if u["obs"]:
+                st.markdown("**Observações:**")
+                for o in u["obs"]:
+                    st.markdown(f"- {o}")
+            st.markdown(f"🔗 [Site oficial]({u['site']})")
+    st.stop()
+
+# ════════════════════════════════════════════════════════════════════════════
+# VESTIBULARES 2026
+# ════════════════════════════════════════════════════════════════════════════
+elif st.session_state.pagina == "vest2026":
+    btn_voltar("home")
     st.markdown('<div class="main-title">🎓 Vestibulares 2026</div>', unsafe_allow_html=True)
     st.markdown('<div class="main-subtitle">Selecione um vestibular para ver as informações completas</div>', unsafe_allow_html=True)
     st.markdown("---")
 
     vestibular = st.selectbox("Escolha o vestibular:", ["Selecione...", "ENEM", "FUVEST", "UNICAMP"], label_visibility="collapsed")
-
-    def render_datas(dados):
-        for item, data, gray in dados:
-            col1, col2 = st.columns([3, 1])
-            with col1:
-                st.markdown(f"**{item}**")
-            with col2:
-                cls = "badge badge-gray" if gray else "badge"
-                st.markdown(f'<span class="{cls}">{data}</span>', unsafe_allow_html=True)
-            st.markdown("")
 
     if vestibular == "ENEM":
         st.markdown("## 📝 ENEM")
@@ -328,32 +549,15 @@ Na redação, os corretores esperam **menos redações prontas**, que seguem a "
                 st.markdown(f"- **{titulo}** — *{autora}*")
 
 # ════════════════════════════════════════════════════════════════════════════
-# PÁGINA 2 — VESTIBULARES MEIO DE ANO 2026
+# VESTIBULARES MEIO DE ANO
 # ════════════════════════════════════════════════════════════════════════════
-elif pagina == "meioano":
-
+elif st.session_state.pagina == "meioano":
+    btn_voltar("home")
     st.markdown('<div class="main-title">📅 Vestibulares Meio de Ano 2026</div>', unsafe_allow_html=True)
     st.markdown('<div class="main-subtitle">Selecione um vestibular para ver as informações completas</div>', unsafe_allow_html=True)
     st.markdown("---")
 
-    vestibular_meio = st.selectbox(
-        "Escolha o vestibular:",
-        ["Selecione...", "UNESP 2026/2", "INSPER 2026/2", "MAUÁ 2026/2", "FGV 2026/2"],
-        label_visibility="collapsed"
-    )
-
-    def render_cronograma(dados, site=None):
-        if site:
-            st.markdown(f"🔗 **Site:** [{site}](https://{site})")
-            st.markdown("")
-        for item, data, gray in dados:
-            col1, col2 = st.columns([3, 1])
-            with col1:
-                st.markdown(f"**{item}**")
-            with col2:
-                cls = "badge badge-gray" if gray else "badge"
-                st.markdown(f'<span class="{cls}">{data}</span>', unsafe_allow_html=True)
-            st.markdown("")
+    vestibular_meio = st.selectbox("Escolha o vestibular:", ["Selecione...", "UNESP 2026/2", "INSPER 2026/2", "MAUÁ 2026/2", "FGV 2026/2"], label_visibility="collapsed")
 
     if vestibular_meio == "UNESP 2026/2":
         st.markdown("## 🏫 UNESP 2026/2")
@@ -404,10 +608,10 @@ elif pagina == "meioano":
         ], site="fgv.br")
 
 # ════════════════════════════════════════════════════════════════════════════
-# PÁGINA 3 — VOCÊ SABIA?
+# VOCÊ SABIA?
 # ════════════════════════════════════════════════════════════════════════════
-elif pagina == "sabia":
-
+elif st.session_state.pagina == "sabia":
+    btn_voltar("home")
     st.markdown('<div class="main-title">💡 Você sabia?</div>', unsafe_allow_html=True)
     st.markdown('<div class="main-subtitle">Dicas e recursos gratuitos para turbinar seus estudos</div>', unsafe_allow_html=True)
     st.markdown("---")
