@@ -664,3 +664,97 @@ Outros cursinhos que oferecem simulados abertos presenciais/online:
 - **Cursinho da Poli**
 - **CUJA (UNIFESP)**
 """)
+
+    st.markdown("---")
+    with st.expander("📱 O que seguir para me atualizar?"):
+        st.markdown("")
+        _, b1, b2, b3, _ = st.columns([0.2, 2, 2, 2, 0.2])
+        with b1:
+            st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
+            if st.button("📚 Organização de Estudos", use_container_width=True):
+                st.session_state.seguir_sub = "organizacao"
+            st.markdown('</div>', unsafe_allow_html=True)
+        with b2:
+            st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
+            if st.button("📰 Notícias e Atualidades", use_container_width=True):
+                st.session_state.seguir_sub = "noticias"
+            st.markdown('</div>', unsafe_allow_html=True)
+        with b3:
+            st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
+            if st.button("🧑‍🏫 Professores Referência", use_container_width=True):
+                st.session_state.seguir_sub = "professores"
+            st.markdown('</div>', unsafe_allow_html=True)
+
+        sub = st.session_state.get("seguir_sub", None)
+
+        if sub == "organizacao":
+            st.markdown("---")
+            with st.expander("🎯 Estrategistas e Mentores", expanded=True):
+                st.markdown("""
+- **@sabrinaoliveira.vemed:** Uma das maiores referências em mentoria, especialmente para Medicina. Ela foca muito em estratégia de prova, controle emocional e como otimizar o tempo para matérias de peso maior.
+- **@viniciusdeoliiveira:** Focado em ensinar o "caminho das pedras" para a aprovação. Suas dicas costumam envolver técnicas de memorização, como lidar com simulados e como não travar em questões difíceis.
+- **@olastro** (Theo Affini e Matheus Custódio): Especialistas em ajudar vestibulandos a construir uma base sólida, focando em métodos de estudo baseados em evidência (revisão espaçada, prática deliberada, etc.).
+""")
+            with st.expander("📒 Studygrams de Organização", expanded=True):
+                st.markdown("""
+- **@biazmed** (Beatriz Zamarco): Referência em organização para ENEM e Fuvest. Ela compartilha como usa ferramentas de gestão, como aumentou sua nota em pontos específicos e como mantém a disciplina no dia a dia.
+- **@luisaoliveirx:** Excelente para quem quer dicas de hábitos e aprendizado eficiente. Ela foca muito em como tornar a rotina menos pesada e mais produtiva.
+- **@matt.studies** (Mateus Negri): Traz um conteúdo muito visual e prático sobre vlogs de estudo e técnicas de organização que funcionam tanto para o colégio quanto para o cursinho.
+""")
+            with st.expander("🗓️ Ferramentas e Cronogramas", expanded=True):
+                st.markdown("""
+- **@vestibulandoapp:** Ótimo perfil para acompanhar calendários de provas e dicas de como usar aplicativos para cronometrar o estudo (técnica Pomodoro, etc.).
+- **@querosercaloura:** Focado em mapas mentais e organização de agenda. É ideal para quem se perde com o volume de conteúdos e precisa de uma guia visual para os tópicos.
+- **@planeje_estudos:** Focado especificamente em planners e cronogramas detalhados de quanto tempo dedicar a cada matéria.
+""")
+
+        elif sub == "noticias":
+            st.markdown("---")
+            with st.expander("📡 Curadoria de Notícias", expanded=True):
+                st.markdown("""
+- **@g1** (Editoria de Educação): O G1 tem um braço muito forte focado no ENEM. Eles postam diariamente notícias sobre o que está acontecendo no Brasil e no mundo com uma linguagem direta, além de quadros como o "Fato ou Fake", excelente para desenvolver senso crítico.
+- **@jocacorreia:** O professor Joca é uma das maiores referências em Geopolítica. Ele consegue conectar conflitos atuais (como as tensões no Oriente Médio ou crises climáticas) com o contexto histórico que o vestibular exige.
+- **@atualidadescomorlando:** O professor Orlando traz análises semanais sobre os principais fatos do mundo, sempre com foco em como aquele tema pode virar uma proposta de redação ou uma questão de Geografia/História.
+""")
+            with st.expander("🗺️ Infográficos e Dados (Visuais)", expanded=True):
+                st.markdown("""
+- **@brasilemmapas:** Essencial. Eles transformam dados complexos de demografia, economia e sociedade em mapas fáceis de entender. Ajuda muito a visualizar as desigualdades regionais do Brasil.
+- **@nexojornal:** Um perfil focado em jornalismo explicativo. Os gráficos e "nós explicamos" deles são perfeitos para entender temas complexos (como inflação, IA ou sistema eleitoral) de forma profunda mas rápida.
+""")
+            with st.expander("🌍 Geopolítica e História do Presente", expanded=True):
+                st.markdown("""
+- **@geografiageral:** Posta conteúdos diários sobre o mundo, misturando curiosidades com fatos políticos e ambientais. É excelente para manter a mente "fresca" sobre os nomes de líderes mundiais e fronteiras em disputa.
+- **@geopoliticahoje:** Focado 100% em relações internacionais. É um perfil mais denso, ideal para quem vai prestar cursos como Relações Internacionais, Direito ou quer uma nota muito alta em Humanas.
+""")
+            with st.expander("🎭 Repertório Cultural e Sociedade", expanded=True):
+                st.markdown("""
+- **@quebrandootabu:** Embora seja um perfil de opinião, ele levanta muitos debates sociais (racismo, feminismo, saúde mental, sustentabilidade) que são temas clássicos de redação. É bom para ver diferentes argumentos sobre o mesmo assunto.
+- **@tededucation:** As animações e pílulas de conhecimento deles (muitas vezes traduzidas/legendadas) trazem conceitos científicos e sociológicos que dão um "up" imediato na qualidade do seu texto.
+""")
+
+        elif sub == "professores":
+            st.markdown("---")
+            with st.expander("✍️ Redação e Linguagens", expanded=True):
+                st.markdown("""
+- **@professorapablina:** Especialista em Redação ENEM. Ela foca muito em estrutura, conectivos e como garantir a nota 1000 com estratégias replicáveis.
+- **@viniciusoliveirapro:** Criador do "Manual da Redação". É excelente para quem precisa de repertório sociocultural e quer entender como as bancas (não só ENEM, mas também as de São Paulo) avaliam o texto.
+- **@professor_noslen:** O maior canal de Língua Portuguesa do Brasil. No Instagram, ele traz pílulas rápidas de gramática e literatura que ajudam muito nas questões objetivas.
+""")
+            with st.expander("📐 Matemática e Física", expanded=True):
+                st.markdown("""
+- **@professorfredao:** Se você vai prestar ENEM, ele é indispensável. Fredão é o "guru" da TRI (Teoria de Resposta ao Item) e analisa cada questão com foco em estatística e eficiência.
+- **@fisicacomdouglas:** Focado em simplificar a Física. Ele utiliza muitas demonstrações visuais e resolve questões de vestibulares paulistas e nacionais de forma bem didática.
+- **@professorguiandrade:** Excelente para quem precisa de Matemática Básica e dicas rápidas de raciocínio lógico.
+""")
+            with st.expander("🔬 Química e Biologia", expanded=True):
+                st.markdown("""
+- **@professorgabrielcabral:** Química de um jeito leve. Ele usa músicas e mnemônicos que realmente grudam na cabeça, ótimo para decorar aquelas fórmulas chatas de orgânica.
+- **@biologiacomsamuelcunha:** Referência em Biologia. O perfil dele traz muitos esquemas visuais e atualizações sobre temas que as bancas amam, como ecologia e genética.
+- **@quimicacomgabs:** Focado em aprofundamento para quem busca cursos concorridos (como Medicina).
+""")
+            with st.expander("🌎 Humanas (História, Geografia e Atualidades)", expanded=True):
+                st.markdown("""
+- **@prof.sergiogrunier:** Especialista em Geografia e Atualidades. Essencial para entender os conflitos mundiais que acabam virando tema de prova meses depois.
+- **@historiaonline** (Professores Rodolfo e Dalton): Uma das maiores autoridades em História. Eles fazem análises profundas de contextos históricos e sociais, essenciais para as questões dissertativas de 2ª fase.
+- **@guiandradehistoria:** Focado em História do Brasil e Geral, com resumos bem estruturados.
+""")
