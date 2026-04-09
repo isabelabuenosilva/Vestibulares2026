@@ -8,6 +8,8 @@ st.set_page_config(
 
 if "pagina" not in st.session_state:
     st.session_state.pagina = "home"
+if "seguir_sub" not in st.session_state:
+    st.session_state.seguir_sub = None
 
 st.markdown("""
 <style>
@@ -66,7 +68,6 @@ st.markdown("""
         font-family: 'Lato', sans-serif;
         color: #002561;
     }
-
     .nav-btn button {
         background-color: #00BDF2 !important;
         color: white !important;
@@ -75,7 +76,6 @@ st.markdown("""
         font-size: 1rem !important;
         border: none !important;
         border-radius: 10px !important;
-        padding: 0.8rem 1.5rem !important;
         width: 100% !important;
     }
     .nav-btn button:hover { background-color: #008ED4 !important; }
@@ -87,7 +87,6 @@ st.markdown("""
         border: 2px solid #00BDF2 !important;
         border-radius: 8px !important;
     }
-
     div[data-testid="stInfo"] {
         background-color: #D4EFFC;
         color: #002561;
@@ -104,6 +103,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+
 # ── Helpers ──────────────────────────────────────────────────────────────────
 def render_datas(dados):
     for item, data, gray in dados:
@@ -115,19 +115,23 @@ def render_datas(dados):
             st.markdown(f'<span class="{cls}">{data}</span>', unsafe_allow_html=True)
         st.markdown("")
 
+
 def render_cronograma(dados, site=None):
     if site:
         st.markdown(f"🔗 **Site:** [{site}](https://{site})")
         st.markdown("")
     render_datas(dados)
 
+
 def btn_voltar(destino="home"):
     st.markdown('<div class="back-btn">', unsafe_allow_html=True)
     if st.button("← Voltar"):
         st.session_state.pagina = destino
+        st.session_state.seguir_sub = None
         st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown("---")
+
 
 def nav_btn(label, destino, col):
     with col:
@@ -136,6 +140,7 @@ def nav_btn(label, destino, col):
             st.session_state.pagina = destino
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
+
 
 # ════════════════════════════════════════════════════════════════════════════
 # HOME
@@ -159,6 +164,7 @@ if st.session_state.pagina == "home":
     nav_btn("🏛️ Políticas de Permanência e Auxílios", "permanencia", c4)
     st.stop()
 
+
 # ════════════════════════════════════════════════════════════════════════════
 # POLÍTICAS DE PERMANÊNCIA
 # ════════════════════════════════════════════════════════════════════════════
@@ -173,6 +179,7 @@ elif st.session_state.pagina == "permanencia":
     nav_btn("🏫 Universidades Privadas", "privadas", c2)
     st.stop()
 
+
 # ════════════════════════════════════════════════════════════════════════════
 # UNIVERSIDADES PÚBLICAS
 # ════════════════════════════════════════════════════════════════════════════
@@ -186,93 +193,219 @@ elif st.session_state.pagina == "publicas":
         {
             "nome": "USP - Universidade de São Paulo",
             "programa": "PAPFE",
-            "beneficios": ["💰 Bolsa mensal: valor mensal para manutenção", "🏠 Moradia estudantil (CRUSP): residência gratuita para alunos de outras cidades", "🍽️ Alimentação: isenção total ou parcial no restaurante", "💻 Inclusão digital (equipamentos/internet)", "🧠 Apoio psicológico e social"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade", "Prioridade para estudantes de escola pública"],
-            "site": "https://www.usp.br"
+            "beneficios": [
+                "💰 Bolsa mensal: valor mensal para manutenção",
+                "🏠 Moradia estudantil (CRUSP): residência gratuita para alunos de outras cidades",
+                "🍽️ Alimentação: isenção total ou parcial no restaurante",
+                "💻 Inclusão digital (equipamentos/internet)",
+                "🧠 Apoio psicológico e social",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade",
+                "Prioridade para estudantes de escola pública",
+            ],
+            "site": "https://www.usp.br",
         },
         {
             "nome": "UNICAMP - Universidade Estadual de Campinas",
             "programa": "SAE / DEAPE",
-            "beneficios": ["💰 Bolsa Auxílio Social: valor mensal para manutenção", "🏠 Moradia (Moradia Estudantil): vaga ou auxílio aluguel", "🍽️ Alimentação: isenção total ou parcial no restaurante", "🚌 Transporte: auxílio financeiro", "🧠 Apoio psicológico e pedagógico"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade e de permanência na cidade", "Prioridade para ingressantes por cotas"],
-            "site": "https://www.unicamp.br"
+            "beneficios": [
+                "💰 Bolsa Auxílio Social: valor mensal para manutenção",
+                "🏠 Moradia (Moradia Estudantil): vaga ou auxílio aluguel",
+                "🍽️ Alimentação: isenção total ou parcial no restaurante",
+                "🚌 Transporte: auxílio financeiro",
+                "🧠 Apoio psicológico e pedagógico",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade e de permanência na cidade",
+                "Prioridade para ingressantes por cotas",
+            ],
+            "site": "https://www.unicamp.br",
         },
         {
             "nome": "UNESP - Universidade Estadual Paulista",
             "programa": "PAE",
-            "beneficios": ["💰 Auxílio permanência", "🏠 Moradia (Moradia Estudantil): vaga ou auxílio aluguel", "🍽️ Alimentação: isenção total ou parcial no restaurante", "🚌 Transporte: auxílio financeiro", "📚 Apoio pedagógico"],
-            "criterios": ["Análise socioeconômica", "Renda familiar", "Distância da cidade de origem", "Situação de vulnerabilidade social"],
-            "site": "https://www.unesp.br"
+            "beneficios": [
+                "💰 Auxílio permanência",
+                "🏠 Moradia (Moradia Estudantil): vaga ou auxílio aluguel",
+                "🍽️ Alimentação: isenção total ou parcial no restaurante",
+                "🚌 Transporte: auxílio financeiro",
+                "📚 Apoio pedagógico",
+            ],
+            "criterios": [
+                "Análise socioeconômica",
+                "Renda familiar",
+                "Distância da cidade de origem",
+                "Situação de vulnerabilidade social",
+            ],
+            "site": "https://www.unesp.br",
         },
         {
             "nome": "UNIFESP - Universidade Federal de São Paulo",
             "programa": "Assistência Estudantil",
-            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🚌 Transporte", "💻 Inclusão digital (equipamentos/internet)"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
-            "site": "https://www.unifesp.br"
+            "beneficios": [
+                "💰 Auxílio permanência",
+                "🏠 Auxílio moradia",
+                "🍽️ Alimentação: Restaurante universitário",
+                "🚌 Transporte",
+                "💻 Inclusão digital (equipamentos/internet)",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade",
+            ],
+            "site": "https://www.unifesp.br",
         },
         {
             "nome": "UFABC - Universidade Federal do ABC",
             "programa": "PAE",
-            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "💻 Inclusão digital (equipamentos/internet)"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade e de permanência na cidade"],
-            "site": "https://www.ufabc.edu.br"
+            "beneficios": [
+                "💰 Auxílio permanência",
+                "🏠 Auxílio moradia",
+                "🍽️ Alimentação: Restaurante universitário",
+                "💻 Inclusão digital (equipamentos/internet)",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade e de permanência na cidade",
+            ],
+            "site": "https://www.ufabc.edu.br",
         },
         {
             "nome": "UFSCAR - Universidade Federal de São Carlos",
             "programa": "Assistência Estudantil",
-            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "💻 Inclusão digital (equipamentos/internet)"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
-            "site": "https://www.ufscar.br"
+            "beneficios": [
+                "💰 Auxílio permanência",
+                "🏠 Auxílio moradia",
+                "🍽️ Alimentação: Restaurante universitário",
+                "💻 Inclusão digital (equipamentos/internet)",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade",
+            ],
+            "site": "https://www.ufscar.br",
         },
         {
             "nome": "UFLA - Universidade Federal de Lavras",
             "programa": "PRAEC",
-            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🧠 Apoio psicológico"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade e de permanência na cidade"],
-            "site": "https://ufla.br"
+            "beneficios": [
+                "💰 Auxílio permanência",
+                "🏠 Auxílio moradia",
+                "🍽️ Alimentação: Restaurante universitário",
+                "🧠 Apoio psicológico",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade e de permanência na cidade",
+            ],
+            "site": "https://ufla.br",
         },
         {
             "nome": "UFU - Universidade Federal de Uberlândia",
             "programa": "PROAE",
-            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🚌 Transporte", "🧠 Saúde e apoio acadêmico"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
-            "site": "https://www.ufu.br"
+            "beneficios": [
+                "💰 Auxílio permanência",
+                "🏠 Auxílio moradia",
+                "🍽️ Alimentação: Restaurante universitário",
+                "🚌 Transporte",
+                "🧠 Saúde e apoio acadêmico",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade",
+            ],
+            "site": "https://www.ufu.br",
         },
         {
             "nome": "UNIFEI - Universidade Federal de Itajubá",
             "programa": "",
-            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "💻 Inclusão digital (equipamentos/internet)"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade e de permanência na cidade"],
-            "site": "https://www.unifei.edu.br"
+            "beneficios": [
+                "💰 Auxílio permanência",
+                "🏠 Auxílio moradia",
+                "🍽️ Alimentação: Restaurante universitário",
+                "💻 Inclusão digital (equipamentos/internet)",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade e de permanência na cidade",
+            ],
+            "site": "https://www.unifei.edu.br",
         },
         {
             "nome": "UFF - Universidade Federal Fluminense",
             "programa": "PROAES",
-            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🧠 Apoio psicológico"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
-            "site": "https://www.uff.br"
+            "beneficios": [
+                "💰 Auxílio permanência",
+                "🏠 Auxílio moradia",
+                "🍽️ Alimentação: Restaurante universitário",
+                "🧠 Apoio psicológico",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade",
+            ],
+            "site": "https://www.uff.br",
         },
         {
             "nome": "UFSC - Universidade Federal de Santa Catarina",
             "programa": "PRAE",
-            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🧠 Apoio psicológico"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade e de permanência na cidade"],
-            "site": "https://ufsc.br"
+            "beneficios": [
+                "💰 Auxílio permanência",
+                "🏠 Auxílio moradia",
+                "🍽️ Alimentação: Restaurante universitário",
+                "🧠 Apoio psicológico",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade e de permanência na cidade",
+            ],
+            "site": "https://ufsc.br",
         },
         {
             "nome": "UFPR - Universidade Federal do Paraná",
             "programa": "PRAE",
-            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação: Restaurante universitário", "🚌 Transporte", "🧠 Saúde"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
-            "site": "https://www.ufpr.br"
+            "beneficios": [
+                "💰 Auxílio permanência",
+                "🏠 Auxílio moradia",
+                "🍽️ Alimentação: Restaurante universitário",
+                "🚌 Transporte",
+                "🧠 Saúde",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade",
+            ],
+            "site": "https://www.ufpr.br",
         },
         {
             "nome": "UFV - Universidade Federal de Viçosa",
             "programa": "",
-            "beneficios": ["💰 Auxílio permanência", "🏠 Auxílio moradia", "🍽️ Alimentação", "🧠 Saúde"],
-            "criterios": ["Renda familiar", "Avaliação socioeconômica", "Situação de vulnerabilidade"],
-            "site": "https://www.ufv.br"
+            "beneficios": [
+                "💰 Auxílio permanência",
+                "🏠 Auxílio moradia",
+                "🍽️ Alimentação",
+                "🧠 Saúde",
+            ],
+            "criterios": [
+                "Renda familiar",
+                "Avaliação socioeconômica",
+                "Situação de vulnerabilidade",
+            ],
+            "site": "https://www.ufv.br",
         },
     ]
 
@@ -289,6 +422,7 @@ elif st.session_state.pagina == "publicas":
             st.markdown(f"🔗 [Site oficial]({u['site']})")
     st.stop()
 
+
 # ════════════════════════════════════════════════════════════════════════════
 # UNIVERSIDADES PRIVADAS
 # ════════════════════════════════════════════════════════════════════════════
@@ -301,79 +435,145 @@ elif st.session_state.pagina == "privadas":
     universidades_privadas = [
         {
             "nome": "Insper",
-            "beneficios": ["💰 Bolsa integral cobre 100% da mensalidade", "💵 Ajuda de custo mensal", "🏠 Moradia", "💻 Notebook", "🌍 Inglês"],
-            "criterios": ["Processo seletivo acadêmico (prova + desempenho)", "Avaliação socioeconômica e de Renda familiar", "Entrevistas + análise de perfil"],
+            "beneficios": [
+                "💰 Bolsa integral cobre 100% da mensalidade",
+                "💵 Ajuda de custo mensal",
+                "🏠 Moradia",
+                "💻 Notebook",
+                "🌍 Inglês",
+            ],
+            "criterios": [
+                "Processo seletivo acadêmico (prova + desempenho)",
+                "Avaliação socioeconômica e de Renda familiar",
+                "Entrevistas + análise de perfil",
+            ],
+            "obs": [],
             "site": "https://www.insper.edu.br",
-            "obs": []
         },
         {
             "nome": "FGV - Fundação Getulio Vargas",
-            "beneficios": ["💰 Bolsas integrais ou parciais", "🏠 Alguns auxílios adicionais (limitados)", "💳 Bolsas reembolsáveis (tipo financiamento)"],
-            "criterios": ["Mérito (desempenho no vestibular)", "Avaliação socioeconômica e de Renda familiar", "Em alguns casos, compromisso de devolução futura"],
+            "beneficios": [
+                "💰 Bolsas integrais ou parciais",
+                "🏠 Alguns auxílios adicionais (limitados)",
+                "💳 Bolsas reembolsáveis (tipo financiamento)",
+            ],
+            "criterios": [
+                "Mérito (desempenho no vestibular)",
+                "Avaliação socioeconômica e de Renda familiar",
+                "Em alguns casos, compromisso de devolução futura",
+            ],
+            "obs": [],
             "site": "https://www.fgv.br",
-            "obs": []
         },
         {
             "nome": "INTELI - Instituto de Tecnologia e Liderança",
-            "beneficios": ["💰 Bolsa integral cobre 100% da mensalidade", "💵 Ajuda de custo mensal", "🏠 Moradia", "🍽️ Alimentação", "🚌 Transporte", "💻 Notebook", "🌍 Inglês"],
-            "criterios": ["Processo seletivo próprio (prova + desempenho + perfil)", "Avaliação socioeconômica e de Renda familiar", "Entrevistas + análise de perfil"],
+            "beneficios": [
+                "💰 Bolsa integral cobre 100% da mensalidade",
+                "💵 Ajuda de custo mensal",
+                "🏠 Moradia",
+                "🍽️ Alimentação",
+                "🚌 Transporte",
+                "💻 Notebook",
+                "🌍 Inglês",
+            ],
+            "criterios": [
+                "Processo seletivo próprio (prova + desempenho + perfil)",
+                "Avaliação socioeconômica e de Renda familiar",
+                "Entrevistas + análise de perfil",
+            ],
+            "obs": [],
             "site": "https://www.inteli.edu.br",
-            "obs": []
         },
         {
             "nome": "Instituto Mauá de Tecnologia",
             "beneficios": ["💰 Bolsas integrais/parciais até 100%"],
-            "criterios": ["Desempenho no vestibular", "Avaliação socioeconômica e de Renda familiar", "Desempenho acadêmico", "Análise de perfil"],
+            "criterios": [
+                "Desempenho no vestibular",
+                "Avaliação socioeconômica e de Renda familiar",
+                "Desempenho acadêmico",
+                "Análise de perfil",
+            ],
+            "obs": [],
             "site": "https://maua.br",
-            "obs": []
         },
         {
             "nome": "PUC SP - Pontifícia Universidade Católica de São Paulo",
             "beneficios": ["💰 Bolsas integrais/parciais até 100%"],
-            "criterios": ["Desempenho no vestibular", "Desempenho acadêmico", "Entrevista", "Avaliação socioeconômica e de Renda familiar"],
-            "site": "https://www.pucsp.br",
+            "criterios": [
+                "Desempenho no vestibular",
+                "Desempenho acadêmico",
+                "Entrevista",
+                "Avaliação socioeconômica e de Renda familiar",
+            ],
             "obs": [
                 "**Bolsa SER PUC:** Edital específico para alunos que não se enquadram totalmente no perfil filantrópico, mas precisam de auxílio, mantido por doações.",
-                "**Pod PuG:** Programa de parcelamento da própria PUC, sem juros, onde se paga metade durante o curso e o restante após a formatura."
-            ]
+                "**Pod PuG:** Programa de parcelamento da própria PUC, sem juros, onde se paga metade durante o curso e o restante após a formatura.",
+            ],
+            "site": "https://www.pucsp.br",
         },
         {
             "nome": "Universidade Presbiteriana Mackenzie",
             "beneficios": ["💰 Bolsas integrais/parciais até 100%"],
             "criterios": [
                 "**Bolsa Filantrópica Mackenzie:** Avaliação socioeconômica e de Renda familiar.",
-                "**Programa Mackenzie Pra Você:** Destinado a alunos que cursaram o ensino médio em escola pública. A seleção é a partir do desempenho no vestibular."
+                "**Programa Mackenzie Pra Você:** Destinado a alunos que cursaram o ensino médio em escola pública. A seleção é a partir do desempenho no vestibular.",
             ],
+            "obs": [],
             "site": "https://www.mackenzie.br",
-            "obs": []
         },
         {
             "nome": "Centro Universitário FEI",
-            "beneficios": ["💰 Bolsas integrais/parciais até 100%", "A bolsa é reavaliada semestralmente a partir de uma análise de critérios socioeconômicos e do desempenho acadêmico"],
-            "criterios": ["Desempenho no vestibular", "Avaliação socioeconômica e de Renda familiar"],
+            "beneficios": [
+                "💰 Bolsas integrais/parciais até 100%",
+                "A bolsa é reavaliada semestralmente a partir de uma análise de critérios socioeconômicos e do desempenho acadêmico",
+            ],
+            "criterios": [
+                "Desempenho no vestibular",
+                "Avaliação socioeconômica e de Renda familiar",
+            ],
+            "obs": [],
             "site": "https://www.fei.edu.br",
-            "obs": []
         },
         {
             "nome": "Faculdade Israelita de Ciências da Saúde Albert Einstein",
-            "beneficios": ["💰 Bolsas integrais/parciais até 100%", "A bolsa é reavaliada anualmente a partir de uma análise de critérios socioeconômicos e do desempenho acadêmico"],
-            "criterios": ["Alto desempenho acadêmico", "Avaliação socioeconômica e de Renda familiar", "Entrevistas + análise de perfil"],
+            "beneficios": [
+                "💰 Bolsas integrais/parciais até 100%",
+                "A bolsa é reavaliada anualmente a partir de uma análise de critérios socioeconômicos e do desempenho acadêmico",
+            ],
+            "criterios": [
+                "Alto desempenho acadêmico",
+                "Avaliação socioeconômica e de Renda familiar",
+                "Entrevistas + análise de perfil",
+            ],
+            "obs": [],
             "site": "https://www.einstein.br",
-            "obs": []
         },
         {
             "nome": "Faculdade de Ciências Médicas da Santa Casa de São Paulo",
-            "beneficios": ["💰 Bolsas integrais (100%) e parciais (50%)", "A bolsa é reavaliada anualmente a partir de uma análise de critérios socioeconômicos"],
-            "criterios": ["Desempenho no vestibular", "Avaliação socioeconômica e de Renda familiar"],
+            "beneficios": [
+                "💰 Bolsas integrais (100%) e parciais (50%)",
+                "A bolsa é reavaliada anualmente a partir de uma análise de critérios socioeconômicos",
+            ],
+            "criterios": [
+                "Desempenho no vestibular",
+                "Avaliação socioeconômica e de Renda familiar",
+            ],
+            "obs": [],
             "site": "https://fcmsantacasasp.edu.br",
-            "obs": []
         },
         {
             "nome": "Hospital Sírio-Libanês Ensino e Pesquisa",
-            "beneficios": ["💰 Bolsas integrais que cobrem matrícula e mensalidades do curso", "A bolsa é reavaliada semestralmente a partir de uma análise de critérios socioeconômicos e do desempenho acadêmico"],
-            "criterios": ["Entrevistas + análise de perfil", "Desempenho no vestibular", "Avaliação socioeconômica e de Renda familiar"],
+            "beneficios": [
+                "💰 Bolsas integrais que cobrem matrícula e mensalidades do curso",
+                "A bolsa é reavaliada semestralmente a partir de uma análise de critérios socioeconômicos e do desempenho acadêmico",
+            ],
+            "criterios": [
+                "Entrevistas + análise de perfil",
+                "Desempenho no vestibular",
+                "Avaliação socioeconômica e de Renda familiar",
+            ],
+            "obs": [],
             "site": "https://www.hospitalsiriolibanes.org.br",
-            "obs": []
         },
     ]
 
@@ -391,6 +591,7 @@ elif st.session_state.pagina == "privadas":
                     st.markdown(f"- {o}")
             st.markdown(f"🔗 [Site oficial]({u['site']})")
     st.stop()
+
 
 # ════════════════════════════════════════════════════════════════════════════
 # VESTIBULARES 2026
@@ -548,6 +749,7 @@ Na redação, os corretores esperam **menos redações prontas**, que seguem a "
             ]:
                 st.markdown(f"- **{titulo}** — *{autora}*")
 
+
 # ════════════════════════════════════════════════════════════════════════════
 # VESTIBULARES MEIO DE ANO
 # ════════════════════════════════════════════════════════════════════════════
@@ -589,14 +791,14 @@ elif st.session_state.pagina == "meioano":
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("#### 🏢 Modalidade Presencial")
-            st.markdown(f'<span class="badge">Até 17/06</span> Inscrições para prova presencial', unsafe_allow_html=True)
+            st.markdown('<span class="badge">Até 17/06</span> Inscrições para prova presencial', unsafe_allow_html=True)
             st.markdown("")
-            st.markdown(f'<span class="badge">21/06</span> Prova presencial', unsafe_allow_html=True)
+            st.markdown('<span class="badge">21/06</span> Prova presencial', unsafe_allow_html=True)
         with col2:
             st.markdown("#### 💻 Modalidade Online")
-            st.markdown(f'<span class="badge">Até 22/06</span> Inscrições para prova online', unsafe_allow_html=True)
+            st.markdown('<span class="badge">Até 22/06</span> Inscrições para prova online', unsafe_allow_html=True)
             st.markdown("")
-            st.markdown(f'<span class="badge">24/06</span> Prova online', unsafe_allow_html=True)
+            st.markdown('<span class="badge">24/06</span> Prova online', unsafe_allow_html=True)
 
     elif vestibular_meio == "FGV 2026/2":
         st.markdown("## 📊 FGV 2026/2")
@@ -606,6 +808,7 @@ elif st.session_state.pagina == "meioano":
             ("Inscrições", "Até 27/04", False),
             ("Prova", "24/05", False),
         ], site="fgv.br")
+
 
 # ════════════════════════════════════════════════════════════════════════════
 # VOCÊ SABIA?
@@ -667,92 +870,97 @@ Outros cursinhos que oferecem simulados abertos presenciais/online:
 
     st.markdown("---")
     st.markdown("### 📱 O que seguir para me atualizar?")
+    st.markdown("")
+
     _, b1, b2, b3, _ = st.columns([0.2, 2, 2, 2, 0.2])
     with b1:
         st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
         if st.button("📚 Organização de Estudos", use_container_width=True):
             st.session_state.seguir_sub = "organizacao"
+            st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
     with b2:
         st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
         if st.button("📰 Notícias e Atualidades", use_container_width=True):
             st.session_state.seguir_sub = "noticias"
+            st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
     with b3:
         st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
         if st.button("🧑‍🏫 Professores Referência", use_container_width=True):
             st.session_state.seguir_sub = "professores"
+            st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
     sub = st.session_state.get("seguir_sub", None)
 
     if sub == "organizacao":
-            st.markdown("---")
-            with st.expander("🎯 Estrategistas e Mentores", expanded=True):
-                st.markdown("""
+        st.markdown("---")
+        with st.expander("🎯 Estrategistas e Mentores", expanded=True):
+            st.markdown("""
 - **@sabrinaoliveira.vemed:** Uma das maiores referências em mentoria, especialmente para Medicina. Ela foca muito em estratégia de prova, controle emocional e como otimizar o tempo para matérias de peso maior.
 - **@viniciusdeoliiveira:** Focado em ensinar o "caminho das pedras" para a aprovação. Suas dicas costumam envolver técnicas de memorização, como lidar com simulados e como não travar em questões difíceis.
 - **@olastro** (Theo Affini e Matheus Custódio): Especialistas em ajudar vestibulandos a construir uma base sólida, focando em métodos de estudo baseados em evidência (revisão espaçada, prática deliberada, etc.).
 """)
-            with st.expander("📒 Studygrams de Organização", expanded=True):
-                st.markdown("""
+        with st.expander("📒 Studygrams de Organização", expanded=True):
+            st.markdown("""
 - **@biazmed** (Beatriz Zamarco): Referência em organização para ENEM e Fuvest. Ela compartilha como usa ferramentas de gestão, como aumentou sua nota em pontos específicos e como mantém a disciplina no dia a dia.
 - **@luisaoliveirx:** Excelente para quem quer dicas de hábitos e aprendizado eficiente. Ela foca muito em como tornar a rotina menos pesada e mais produtiva.
 - **@matt.studies** (Mateus Negri): Traz um conteúdo muito visual e prático sobre vlogs de estudo e técnicas de organização que funcionam tanto para o colégio quanto para o cursinho.
 """)
-            with st.expander("🗓️ Ferramentas e Cronogramas", expanded=True):
-                st.markdown("""
+        with st.expander("🗓️ Ferramentas e Cronogramas", expanded=True):
+            st.markdown("""
 - **@vestibulandoapp:** Ótimo perfil para acompanhar calendários de provas e dicas de como usar aplicativos para cronometrar o estudo (técnica Pomodoro, etc.).
 - **@querosercaloura:** Focado em mapas mentais e organização de agenda. É ideal para quem se perde com o volume de conteúdos e precisa de uma guia visual para os tópicos.
 - **@planeje_estudos:** Focado especificamente em planners e cronogramas detalhados de quanto tempo dedicar a cada matéria.
 """)
 
-        elif sub == "noticias":
-            st.markdown("---")
-            with st.expander("📡 Curadoria de Notícias", expanded=True):
-                st.markdown("""
+    elif sub == "noticias":
+        st.markdown("---")
+        with st.expander("📡 Curadoria de Notícias", expanded=True):
+            st.markdown("""
 - **@g1** (Editoria de Educação): O G1 tem um braço muito forte focado no ENEM. Eles postam diariamente notícias sobre o que está acontecendo no Brasil e no mundo com uma linguagem direta, além de quadros como o "Fato ou Fake", excelente para desenvolver senso crítico.
 - **@jocacorreia:** O professor Joca é uma das maiores referências em Geopolítica. Ele consegue conectar conflitos atuais (como as tensões no Oriente Médio ou crises climáticas) com o contexto histórico que o vestibular exige.
 - **@atualidadescomorlando:** O professor Orlando traz análises semanais sobre os principais fatos do mundo, sempre com foco em como aquele tema pode virar uma proposta de redação ou uma questão de Geografia/História.
 """)
-            with st.expander("🗺️ Infográficos e Dados (Visuais)", expanded=True):
-                st.markdown("""
+        with st.expander("🗺️ Infográficos e Dados (Visuais)", expanded=True):
+            st.markdown("""
 - **@brasilemmapas:** Essencial. Eles transformam dados complexos de demografia, economia e sociedade em mapas fáceis de entender. Ajuda muito a visualizar as desigualdades regionais do Brasil.
 - **@nexojornal:** Um perfil focado em jornalismo explicativo. Os gráficos e "nós explicamos" deles são perfeitos para entender temas complexos (como inflação, IA ou sistema eleitoral) de forma profunda mas rápida.
 """)
-            with st.expander("🌍 Geopolítica e História do Presente", expanded=True):
-                st.markdown("""
+        with st.expander("🌍 Geopolítica e História do Presente", expanded=True):
+            st.markdown("""
 - **@geografiageral:** Posta conteúdos diários sobre o mundo, misturando curiosidades com fatos políticos e ambientais. É excelente para manter a mente "fresca" sobre os nomes de líderes mundiais e fronteiras em disputa.
 - **@geopoliticahoje:** Focado 100% em relações internacionais. É um perfil mais denso, ideal para quem vai prestar cursos como Relações Internacionais, Direito ou quer uma nota muito alta em Humanas.
 """)
-            with st.expander("🎭 Repertório Cultural e Sociedade", expanded=True):
-                st.markdown("""
+        with st.expander("🎭 Repertório Cultural e Sociedade", expanded=True):
+            st.markdown("""
 - **@quebrandootabu:** Embora seja um perfil de opinião, ele levanta muitos debates sociais (racismo, feminismo, saúde mental, sustentabilidade) que são temas clássicos de redação. É bom para ver diferentes argumentos sobre o mesmo assunto.
 - **@tededucation:** As animações e pílulas de conhecimento deles (muitas vezes traduzidas/legendadas) trazem conceitos científicos e sociológicos que dão um "up" imediato na qualidade do seu texto.
 """)
 
-        elif sub == "professores":
-            st.markdown("---")
-            with st.expander("✍️ Redação e Linguagens", expanded=True):
-                st.markdown("""
+    elif sub == "professores":
+        st.markdown("---")
+        with st.expander("✍️ Redação e Linguagens", expanded=True):
+            st.markdown("""
 - **@professorapablina:** Especialista em Redação ENEM. Ela foca muito em estrutura, conectivos e como garantir a nota 1000 com estratégias replicáveis.
 - **@viniciusoliveirapro:** Criador do "Manual da Redação". É excelente para quem precisa de repertório sociocultural e quer entender como as bancas (não só ENEM, mas também as de São Paulo) avaliam o texto.
 - **@professor_noslen:** O maior canal de Língua Portuguesa do Brasil. No Instagram, ele traz pílulas rápidas de gramática e literatura que ajudam muito nas questões objetivas.
 """)
-            with st.expander("📐 Matemática e Física", expanded=True):
-                st.markdown("""
+        with st.expander("📐 Matemática e Física", expanded=True):
+            st.markdown("""
 - **@professorfredao:** Se você vai prestar ENEM, ele é indispensável. Fredão é o "guru" da TRI (Teoria de Resposta ao Item) e analisa cada questão com foco em estatística e eficiência.
 - **@fisicacomdouglas:** Focado em simplificar a Física. Ele utiliza muitas demonstrações visuais e resolve questões de vestibulares paulistas e nacionais de forma bem didática.
 - **@professorguiandrade:** Excelente para quem precisa de Matemática Básica e dicas rápidas de raciocínio lógico.
 """)
-            with st.expander("🔬 Química e Biologia", expanded=True):
-                st.markdown("""
+        with st.expander("🔬 Química e Biologia", expanded=True):
+            st.markdown("""
 - **@professorgabrielcabral:** Química de um jeito leve. Ele usa músicas e mnemônicos que realmente grudam na cabeça, ótimo para decorar aquelas fórmulas chatas de orgânica.
 - **@biologiacomsamuelcunha:** Referência em Biologia. O perfil dele traz muitos esquemas visuais e atualizações sobre temas que as bancas amam, como ecologia e genética.
 - **@quimicacomgabs:** Focado em aprofundamento para quem busca cursos concorridos (como Medicina).
 """)
-            with st.expander("🌎 Humanas (História, Geografia e Atualidades)", expanded=True):
-                st.markdown("""
+        with st.expander("🌎 Humanas (História, Geografia e Atualidades)", expanded=True):
+            st.markdown("""
 - **@prof.sergiogrunier:** Especialista em Geografia e Atualidades. Essencial para entender os conflitos mundiais que acabam virando tema de prova meses depois.
 - **@historiaonline** (Professores Rodolfo e Dalton): Uma das maiores autoridades em História. Eles fazem análises profundas de contextos históricos e sociais, essenciais para as questões dissertativas de 2ª fase.
 - **@guiandradehistoria:** Focado em História do Brasil e Geral, com resumos bem estruturados.
