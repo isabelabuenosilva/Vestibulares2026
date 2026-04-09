@@ -668,25 +668,25 @@ Outros cursinhos que oferecem simulados abertos presenciais/online:
     st.markdown("---")
     st.markdown("### 📱 O que seguir para me atualizar?")
     _, b1, b2, b3, _ = st.columns([0.2, 2, 2, 2, 0.2])
-        with b1:
-            st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
-            if st.button("📚 Organização de Estudos", use_container_width=True):
-                st.session_state.seguir_sub = "organizacao"
-            st.markdown('</div>', unsafe_allow_html=True)
-        with b2:
-            st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
-            if st.button("📰 Notícias e Atualidades", use_container_width=True):
-                st.session_state.seguir_sub = "noticias"
-            st.markdown('</div>', unsafe_allow_html=True)
-        with b3:
-            st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
-            if st.button("🧑‍🏫 Professores Referência", use_container_width=True):
-                st.session_state.seguir_sub = "professores"
-            st.markdown('</div>', unsafe_allow_html=True)
+    with b1:
+        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
+        if st.button("📚 Organização de Estudos", use_container_width=True):
+            st.session_state.seguir_sub = "organizacao"
+        st.markdown('</div>', unsafe_allow_html=True)
+    with b2:
+        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
+        if st.button("📰 Notícias e Atualidades", use_container_width=True):
+            st.session_state.seguir_sub = "noticias"
+        st.markdown('</div>', unsafe_allow_html=True)
+    with b3:
+        st.markdown('<div class="nav-btn">', unsafe_allow_html=True)
+        if st.button("🧑‍🏫 Professores Referência", use_container_width=True):
+            st.session_state.seguir_sub = "professores"
+        st.markdown('</div>', unsafe_allow_html=True)
 
-        sub = st.session_state.get("seguir_sub", None)
+    sub = st.session_state.get("seguir_sub", None)
 
-        if sub == "organizacao":
+    if sub == "organizacao":
             st.markdown("---")
             with st.expander("🎯 Estrategistas e Mentores", expanded=True):
                 st.markdown("""
